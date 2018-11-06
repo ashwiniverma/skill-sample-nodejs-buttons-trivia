@@ -1,46 +1,689 @@
-#  Build An Alexa 'Better with Buttons' Trivia Game
-<img src="https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexa-skills-kit/tutorials/fact/header._TTH_.png" />
-
-**Important: The Gadgets Skill API is in beta and is subject to change at any time without notice. We welcome your feedback.**
-
-This Alexa sample skill is a template for a trivia game which is played with [Echo Buttons](https://www.amazon.com/Echo-Buttons-Alexa-Gadget-Pack/dp/B072C4KCQH) in multiplayer mode but can also be played without buttons in single player mode. Provided a list of interesting questions about a topic, Alexa will select a group of questions to ask the player(s), keep score throughout, and announce the winner at the end of the game.
-
-This sample skill demonstrates how to discover Echo Buttons using [roll call](https://developer.amazon.com/docs/gadget-skills/discover-echo-buttons.html#goals), how to [receive Echo Button events](https://developer.amazon.com/docs/gadget-skills/receive-echo-button-events.html), and how to [animate the Echo Button lights](https://developer.amazon.com/docs/gadget-skills/control-echo-buttons.html#animate).
-
-You may use this sample game as a starting point to build your own 'Better with Buttons' trivia game. You can customize Alexa's voice responses, the question list, and some game options without making changes to the code. However, to provide a truely unique game experience code changes will likely be necessary.
-
-### About
-This guide assumes you have your developer environment ready to go and that you have some familiarity with CLI (Command Line Interface) Tools, [AWS](https://aws.amazon.com/), and the [ASK Developer Portal](https://developer.amazon.com/alexa-skills-kit).
-
-### Pre-requisites
-
-* Node.js (> v8)
-* Register for an [AWS Account](https://aws.amazon.com/)
-* Register for an [Amazon Developer Account](https://developer.amazon.com)
-
-
-[![Get Started](https://camo.githubusercontent.com/db9b9ce26327ad3bac57ec4daf0961a382d75790/68747470733a2f2f6d2e6d656469612d616d617a6f6e2e636f6d2f696d616765732f472f30312f6d6f62696c652d617070732f6465782f616c6578612f616c6578612d736b696c6c732d6b69742f7475746f7269616c732f67656e6572616c2f627574746f6e732f627574746f6e5f6765745f737461727465642e5f5454485f2e706e67)](./instructions/1-voice-user-interface.md)
-
-Or click [here](./instructions/7-cli.md) for instructions using the ASK CLI (command line interface).
-
-## Additional Resources
-
-### Community
-* [Amazon Developer Forums](https://forums.developer.amazon.com/spaces/311/gadgets-beta.html) - Join the conversation!
-* [Hackster.io](https://www.hackster.io/amazon-alexa) - See what others are building with Alexa.
-
-### Tutorials & Guides
-* [Voice Design Guide](https://developer.amazon.com/designing-for-voice/) - A great resource for learning conversational and voice user interface design.
-* [Codecademy: Learn Alexa](https://www.codecademy.com/learn/learn-alexa) - Learn how to build an Alexa Skill from within your browser with this beginner friendly tutorial on Codecademy!
-* [Echo Buttons Color Changer Sample Skill](https://github.com/alexa/skill-sample-nodejs-buttons-colorchanger) - A simpler skill that shows how to do roll call and control light animations for Echo Buttons.
-
-### Documentation
-* [Official Alexa Skills Kit Node.js SDK](https://www.npmjs.com/package/ask-sdk) - The Official Node.js SDK Documentation
-* [Official Alexa Skills Kit Documentation](https://developer.amazon.com/docs/ask-overviews/build-skills-with-the-alexa-skills-kit.html) - Official Alexa Skills Kit Documentation
-* [Official Alexa Gadgets Documentation](https://developer.amazon.com/alexa/alexa-gadgets) - The Echo Buttons are the first Alexa Gadget
-
-<p align="center">
-  <br/>
-  <br/>
-  <img src="https://images-na.ssl-images-amazon.com/images/I/61GquaDrMWL._SY450_.jpg"/>
-</p>
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "my custom button",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "how do I play this game",
+                        "how is this game played",
+                        "how do I play this"
+                    ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": [
+                        "ready"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "PlayerCount",
+                    "slots": [
+                        {
+                            "name": "players",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{players} players",
+                        "there are {players}",
+                        "there are {players} players",
+                        "there are {players} of us",
+                        "we have {players}",
+                        "we have {players} players",
+                        "there will be {players}",
+                        "there will be {players} players"
+                    ]
+                },
+                {
+                    "name": "AnswerIntent",
+                    "slots": [
+                        {
+                            "name": "answers",
+                            "type": "ANSWER_OPTIONS"
+                        },
+                        {
+                            "name": "item",
+                            "type": "ITEM_OPTIONS"
+                        },
+                        {
+                            "name": "dollars",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "cents",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "numanswer",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "it's {numanswer} {item}",
+                        "it is {numanswer} {item}",
+                        "{dollars} dollars and {cents} cents",
+                        "is it {numanswer} {item}",
+                        "{dollars} dollars {cents} cents",
+                        "i think the answer is {numanswer} {item}",
+                        "the answer is {numanswer} {item}",
+                        "answer is {numanswer} {item}",
+                        "{numanswer} percent",
+                        "{numanswer} {item}",
+                        "answer is {answers}",
+                        "answer is {numanswer}",
+                        "a {answers}",
+                        "the {answers}",
+                        "the answer is {answers}",
+                        "my answers is {answers}",
+                        "is it {answers}",
+                        "it is {answers}",
+                        "it was {answers}",
+                        "it might be {answers}",
+                        "i think it is {answers}",
+                        "i think it was {answers}",
+                        "i think it might be {answers}",
+                        "i think the answer is {answers}",
+                        "i think the answer might be {answers}"
+                    ]
+                },
+                {
+                    "name": "AnswerOnlyIntent",
+                    "slots": [
+                        {
+                            "name": "answers",
+                            "type": "ANSWER_OPTIONS"
+                        },
+                        {
+                            "name": "numanswer",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{numanswer}",
+                        "{answers}"
+                    ]
+                },
+                {
+                    "name": "PlayGame",
+                    "slots": [],
+                    "samples": [
+                        "play",
+                        "play the game",
+                        "play a game",
+                        "I'm ready to play",
+                        "let's play",
+                        "start a game",
+                        "start the game",
+                        "let's start the game",
+                        "ready to play",
+                        "ready to start",
+                        "let's start",
+                        "let's begin",
+                        "begin the game",
+                        "get started"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StartOverIntent",
+                    "samples": [
+                        "start new game",
+                        "play a new game",
+                        "start a new game",
+                        "begin a new game",
+                        "start game",
+                        "begin new game",
+                        "new game",
+                        "start over"
+                    ]
+                },
+                {
+                    "name": "DontKnowIntent",
+                    "slots": [],
+                    "samples": [
+                        "I don't know",
+                        "don't know",
+                        "I am not sure",
+                        "I have not idea",
+                        "I don't understand",
+                        "I've got no clue",
+                        "I've got no idea",
+                        "I have no clue",
+                        "I have no idea",
+                        "I am clueless"
+                    ]
+                },
+                {
+                    "name": "AMAZON.MoreIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateSettingsIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": [
+                        "skip",
+                        "skip this question",
+                        "skip this one",
+                        "next question",
+                        "go to next question",
+                        "go to the next question",
+                        "I give up",
+                        "we give up"
+                    ]
+                },
+                {
+                    "name": "AMAZON.PageUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PageDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.PreviousIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollRightIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollDownIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollLeftIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.ScrollUpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "PlayerCountOnly",
+                    "slots": [
+                        {
+                            "name": "players",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{players}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "answers",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "fox"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wolf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dog"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "caribou"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "polar bear"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "narwhal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "penguin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "orangutan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "elephant"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kodiac"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "blue whale"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "janet"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "jenny"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "joey"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "adder"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "copperhead"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "coral snake"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cobra"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sailfish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "porpoise"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "black with white stripes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "white with black stripes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "shell"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "arachnid"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "crustacean"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "spectacled bear"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "giant panda"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dolphins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "brown bear"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "frat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "den"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pride"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pack"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "flying fish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tuna"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ANSWER_OPTIONS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Alice"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Megan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Robert"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Jennifer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Julie"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Susan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Chris"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mike"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "John"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "James"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ITEM_OPTIONS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "cupcakes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "scones"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bagels"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "donuts"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "crepes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "waffles"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pancakes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "daffodils"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lillies"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "roses"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tulips"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cookies"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bananas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "apples"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "erasers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pencils"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "marbles"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "chocolates"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "strawberries"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cupcake"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "scone"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bagel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "donut"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "crepe"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "waffle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pancake"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "daffodil"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lilly"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "rose"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tulip"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cookie"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "banana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "apple"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "eraser"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pencil"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "marble"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "chocolate"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "strawberry"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
