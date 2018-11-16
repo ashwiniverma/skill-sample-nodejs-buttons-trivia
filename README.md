@@ -232,11 +232,16 @@
                     ]
                 },
                 {
-                    "name": "LevelIntent",
-                    "slots": [],
+                    "name": "DifficultyIntent",
+                    "slots": [
+                        {
+                            "name": "level",
+                            "type": "DIFFICULTY_LEVELS"
+                        }
+                    ],
                     "samples": [
-                        "ok level",
-                        "level"
+                        "{level} level",
+                        "{level}"
                     ]
                 }
             ],
