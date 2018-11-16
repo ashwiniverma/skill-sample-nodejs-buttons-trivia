@@ -230,6 +230,14 @@
                     "samples": [
                         "{players}"
                     ]
+                },
+                {
+                    "name": "LevelIntent",
+                    "slots": [],
+                    "samples": [
+                        "ok level",
+                        "level"
+                    ]
                 }
             ],
             "types": [
@@ -679,6 +687,26 @@
                         {
                             "name": {
                                 "value": "strawberry"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "DIFFICULTY_LEVELS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "hard"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "medium"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "easy"
                             }
                         }
                     ]
