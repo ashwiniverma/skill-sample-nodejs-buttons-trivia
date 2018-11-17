@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "my custom button",
+            "invocationName": "custom button",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -232,210 +232,30 @@
                     ]
                 },
                 {
-                    "name": "DifficultyIntent",
+                    "name": "DifficultyLevelIntent",
                     "slots": [
                         {
-                            "name": "level",
+                            "name": "difficultyLevel",
                             "type": "DIFFICULTY_LEVELS"
                         }
                     ],
                     "samples": [
-                        "{level} level",
-                        "{level}"
+                        "{difficultyLevel}",
+                        "change level to {difficultyLevel}"
                     ]
+                },
+                {
+                    "name": "AboutIntent",
+                    "slots": [
+                        {
+                            "name": "game",
+                            "type": "fulfil_names"
+                        }
+                    ],
+                    "samples": []
                 }
             ],
             "types": [
-                {
-                    "name": "answers",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "fox"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "wolf"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "cat"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "dog"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "caribou"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "polar bear"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "narwhal"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "penguin"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "orangutan"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "elephant"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "kodiac"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "blue whale"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "janet"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "jenny"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "joey"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "adder"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "copperhead"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "coral snake"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "cobra"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "sailfish"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "porpoise"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "black with white stripes"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "white with black stripes"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "shell"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "fish"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "arachnid"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "crustacean"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "spectacled bear"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "giant panda"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "dolphins"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "brown bear"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "frat"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "den"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "pride"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "pack"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "flying fish"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "tuna"
-                            }
-                        }
-                    ]
-                },
                 {
                     "name": "ANSWER_OPTIONS",
                     "values": [
@@ -712,6 +532,71 @@
                         {
                             "name": {
                                 "value": "easy"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "fulfil_names",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "echo button"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "more than one player"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "single player"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "multi player"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "button"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "game"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "trivia"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "maths"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "math"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mathematics"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "numbers"
                             }
                         }
                     ]
